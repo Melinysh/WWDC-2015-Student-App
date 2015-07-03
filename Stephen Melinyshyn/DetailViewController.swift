@@ -163,7 +163,6 @@ class DetailViewController: UIViewController {
 	override func viewDidAppear(animated: Bool) {
 		self.view.backgroundColor = cardInfo.backgroundColor //needed or else background is black :(
 		
-		self.textField.scrollRangeToVisible(NSRange(location: 0, length: 0))//for fixing textField scrolled down already bug on iphone 4S
 		
 		//animate
 		UIView.animateWithDuration(0.05, animations: { () -> Void in
