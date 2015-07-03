@@ -4,3 +4,6 @@ This is my app submission for a [WWDC Student Scholarship](https://developer.app
 
 #### Update:
 I have been awarded a scholarship! I'm looking forward to returning to WWDC this year.   
+
+#### Update 2:
+Another great year at WWDC! I learned so much and met many talented people. I've made minor changes to the project so it is compatible with iOS 9 and the latest Swift syntax, but the core of the app is the exact same as the one I submitted in April.
