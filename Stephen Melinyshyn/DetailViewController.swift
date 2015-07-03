@@ -70,9 +70,6 @@ class DetailViewController: UIViewController {
 		if let urlStr = cardInfo.extraInfo["url2"] as! String? {
 			UIApplication.sharedApplication().openURL(NSURL(string: urlStr)!)
 		}
-		if let segueName = cardInfo.extraInfo["button2segue"] as! String? {
-			self.performSegueWithIdentifier("segueName", sender: self)
-		}
 	}
 	
 	override func viewDidLoad() {
@@ -110,7 +107,7 @@ class DetailViewController: UIViewController {
 			let viewRegion = MKCoordinateRegionMakeWithDistance(zoomLocation, 2009.344, 2009.344)
 			mapView.setRegion(viewRegion, animated: true)
 		} else if cardInfo.specialStoryboard == "animate" {
-			var animation = CAKeyframeAnimation(keyPath: "position.x")
+			let animation = CAKeyframeAnimation(keyPath: "position.x")
 			animation.duration = 3.0
 			animation.beginTime = CACurrentMediaTime()
 			animation.repeatCount = HUGE
@@ -120,7 +117,7 @@ class DetailViewController: UIViewController {
 			animation.removedOnCompletion = false
 			animation.autoreverses = true
 			animation.rotationMode = kCAAnimationLinear
-			var rotation = CAKeyframeAnimation(keyPath: "transform.rotation")
+			let rotation = CAKeyframeAnimation(keyPath: "transform.rotation")
 			rotation.duration = 1.0
 			rotation.repeatCount = HUGE
 			rotation.fillMode = kCAFillModeForwards

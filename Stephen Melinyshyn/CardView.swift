@@ -42,7 +42,7 @@ class CardView: UIView {
 		imageView.contentMode = UIViewContentMode.ScaleAspectFill
 		imageView.clipsToBounds = true
 		
-		self.setTranslatesAutoresizingMaskIntoConstraints(false)
+		self.translatesAutoresizingMaskIntoConstraints = false
 		tap = UITapGestureRecognizer(target: target, action: "showDetail:")
 		self.addGestureRecognizer(tap)
 		self.layer.shadowColor = UIColor.blackColor().CGColor

@@ -23,7 +23,7 @@ class MasterViewController: UIViewController {
 	
 	@IBOutlet var panGestureRecognizer: UIPanGestureRecognizer!
 	var animator : UIDynamicAnimator!
-	var attachmentBehavior : UIAttachmentBehavior!
+	var attachmentBehavior : UIAttachmentBehavior?
 	var snapBehavior : UISnapBehavior!
 	var cardFrame : CGRect!
 	var cardIsDropping  = false
@@ -48,14 +48,16 @@ class MasterViewController: UIViewController {
 		let location = sender.locationInView(view)
 		let boxLocation = sender.locationInView(card)
 		if sender.state == UIGestureRecognizerState.Began {
-			animator.removeBehavior(attachmentBehavior)
+            if let b = attachmentBehavior {
+                animator.removeBehavior(b)
+            }
 			let centerOffset = UIOffsetMake(boxLocation.x - CGRectGetMidX(card.bounds), boxLocation.y - CGRectGetMidY(card.bounds))
 			attachmentBehavior = UIAttachmentBehavior(item: card, offsetFromCenter: centerOffset, attachedToAnchor: location)
-			animator.addBehavior(attachmentBehavior)
+			animator.addBehavior(attachmentBehavior!)
 		} else if sender.state == UIGestureRecognizerState.Changed {
-			attachmentBehavior.anchorPoint = location
+			attachmentBehavior!.anchorPoint = location
 		} else if sender.state == UIGestureRecognizerState.Ended {
-			animator.removeBehavior(attachmentBehavior)
+			animator.removeBehavior(attachmentBehavior!)
 			snapBehavior = UISnapBehavior(item: card, snapToPoint: view.center)
 			animator.addBehavior(snapBehavior)
 			
@@ -64,11 +66,11 @@ class MasterViewController: UIViewController {
 				cardIsDropping = true //fixes issue of topCard on tap being the one that drops
 				card.userInteractionEnabled = false
 				animator.removeAllBehaviors()
-				var gravity = UIGravityBehavior(items: [card])
+				let gravity = UIGravityBehavior(items: [card])
 				gravity.gravityDirection = CGVectorMake(translation.x/15, translation.y/15) //pulled in the direction of the swipe
 				animator.addBehavior(gravity)
 				
-				UIView.animateKeyframesWithDuration(0.1, delay: 0.3, options: UIViewKeyframeAnimationOptions.allZeros, animations: { () -> Void in
+				UIView.animateKeyframesWithDuration(0.1, delay: 0.3, options: UIViewKeyframeAnimationOptions(), animations: { () -> Void in
 					card.alpha = 0
 					}, completion: { (fin) -> Void in
 						card.removeFromSuperview()
@@ -79,7 +81,7 @@ class MasterViewController: UIViewController {
 						self.viewsAndRotations.removeValueForKey(card)
 					
 						if self.viewsAndRotations.count == 0 { //no more cards to show, so present option to restart
-							var alert = UIAlertController(title: "You're all done!", message: "Go back to the start?", preferredStyle: UIAlertControllerStyle.Alert)
+							let alert = UIAlertController(title: "You're all done!", message: "Go back to the start?", preferredStyle: UIAlertControllerStyle.Alert)
 							let yes = UIAlertAction(title: "Yes", style: UIAlertActionStyle.Cancel, handler: { (a) -> Void in
 								self.reset(self)
 							})
@@ -89,7 +91,7 @@ class MasterViewController: UIViewController {
 							self.presentViewController(alert, animated: true, completion: nil)
 							return
 						}
-						var newTopCard = self.view.subviews.last! as! UIView
+						let newTopCard = self.view.subviews.last! as UIView
 						UIView.animateWithDuration(0.3, animations: { () -> Void in
 							newTopCard.center = self.view.center
 							self.undoButton.alpha = 1
@@ -98,7 +100,7 @@ class MasterViewController: UIViewController {
 						self.animator.addBehavior(self.snapBehavior)
 						self.view.backgroundColor = newTopCard.backgroundColor
 						self.progressIndicator.tintColor = newTopCard.backgroundColor
-						println("There are \(self.view.subviews.count) subviews left.")
+						print("There are \(self.view.subviews.count) subviews left.")
 				})
 				
 			}
@@ -123,7 +125,7 @@ class MasterViewController: UIViewController {
 		if pos > cardViews.count-1 { //make sure index isn't out of range
 			return
 		}
-		var card = cardViews[pos]
+		let card = cardViews[pos]
 		viewsAndRotations[card] = CGFloat(0)
 		card.frame = CGRect(x: 50, y: 150, width: self.view.frame.width - 100, height: self.view.frame.height - 300) //restoring these two properties b/c when card is expanded, they lose them
 		card.layer.cornerRadius = cardCornerRadius
@@ -165,7 +167,7 @@ class MasterViewController: UIViewController {
 			
 
 		} else { //just returned from the transition
-			var topCard = view.subviews[view.subviews.count-2] as! CardView //since there is another uiimageview on top, get 2nd last subview
+			let topCard = view.subviews[view.subviews.count-2] as! CardView //since there is another uiimageview on top, get 2nd last subview
 			
 			// undo the detail view transition animations
 			UIView.animateWithDuration(0.3, animations: { () -> Void in
@@ -227,14 +229,14 @@ class MasterViewController: UIViewController {
 				card.transform = CGAffineTransformConcat(CGAffineTransformMakeRotation(self.viewsAndRotations[card]!), CGAffineTransformMakeScale(1, 1))
 				}, completion: { (finished) -> Void in
 					let delay = 0.2 * (1.0 - (Float(1)/Float(cards.count)))
-					println("Delay is:\(delay)")
+					print("Delay is:\(delay)")
 					NSThread.sleepForTimeInterval(NSTimeInterval(delay))
 					cards.removeAtIndex(0)
 					self.dropCards(cards)
 					
 					if cards.count == 0 && self.firstCardMofication == cardModification.needToAlter { // first step in guiding the user for the first time
-						var c = self.view.subviews.last! as! CardView
-						UIView.animateWithDuration(0.4, delay: 2.8, options: UIViewAnimationOptions.allZeros, animations: { () -> Void in
+						let c = self.view.subviews.last! as! CardView
+						UIView.animateWithDuration(0.4, delay: 2.8, options: UIViewAnimationOptions(), animations: { () -> Void in
 							c.label.text = c.label.text! + " Tap this card to learn more!"
 
 						}, completion: nil)
@@ -256,7 +258,7 @@ class MasterViewController: UIViewController {
 	}
 	
 	func generateCard(cInfo : CardInfo) -> CardView {
-		var card = UINib(nibName: "View", bundle: nil).instantiateWithOwner(CardView(), options: nil).first! as! CardView
+		let card = UINib(nibName: "View", bundle: nil).instantiateWithOwner(CardView(), options: nil).first! as! CardView
 		card.setup(cInfo, cornerRad: cardCornerRadius, target: self)
 		viewsAndRotations[card] = randomAngle()
 		return card
@@ -274,8 +276,8 @@ class MasterViewController: UIViewController {
 	}
 	
 	func cardConstraints(card: CardView) {
-		let Vconstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:|-offset-[card]-offset-|", options: NSLayoutFormatOptions.allZeros, metrics: ["offset": self.view.frame.height/7], views: ["card" : card])
-		let Hconstraints = NSLayoutConstraint.constraintsWithVisualFormat("H:|-offset-[card]-offset-|", options: NSLayoutFormatOptions.allZeros, metrics: ["offset": self.view.frame.width/10], views: ["card" : card])
+		let Vconstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:|-offset-[card]-offset-|", options: NSLayoutFormatOptions(), metrics: ["offset": self.view.frame.height/7], views: ["card" : card])
+		let Hconstraints = NSLayoutConstraint.constraintsWithVisualFormat("H:|-offset-[card]-offset-|", options: NSLayoutFormatOptions(), metrics: ["offset": self.view.frame.width/10], views: ["card" : card])
 		self.view.addConstraints(Vconstraints + Hconstraints)
 	}
 	

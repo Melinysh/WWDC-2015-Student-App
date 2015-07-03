@@ -24,26 +24,26 @@ class DetailTransitionDelegate: NSObject, UIViewControllerTransitioningDelegate,
 	
 	//MARK: UIViewControllerAnimatedTransitioning methods
 	
-	func transitionDuration(transitionContext: UIViewControllerContextTransitioning) -> NSTimeInterval {
+	func transitionDuration(transitionContext: UIViewControllerContextTransitioning?) -> NSTimeInterval {
 		return 0.5 // this isn't called on purpose
 	}
 	func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
 		var isGoingToDetailView = true
-		var fromViewController = transitionContext.viewControllerForKey(UITransitionContextFromViewControllerKey)!
-		var toViewController = transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey)!
+		let fromViewController = transitionContext.viewControllerForKey(UITransitionContextFromViewControllerKey)!
+		let toViewController = transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey)!
 		
 		if toViewController is MasterViewController {
 			isGoingToDetailView = false
 		}
 		
 		let containerView = transitionContext.containerView()
-		containerView.addSubview(toViewController.view!)
-		containerView.addSubview(fromViewController.view!)
+		containerView!.addSubview(toViewController.view!)
+		containerView!.addSubview(fromViewController.view!)
 		
 		//		let animationDuration = self.transitionDuration(transitionContext)
 		
 		if isGoingToDetailView {
-			var topCard = fromViewController.view.subviews.last as! UIView!
+			let topCard = fromViewController.view.subviews.last as UIView!
 			toViewController.view.backgroundColor = topCard.backgroundColor
 		} else { //back to master
 			(toViewController  as! MasterViewController).didReturnFromTransition = true

@@ -66,33 +66,33 @@ class CardData: NSObject {
 	
 	
 	let backgroundColors : [UIColor] = [
-		color(64, 20, 20), //me
-		color(73, 98, 115), //ktown
-		color(108, 0, 61), //jville
-		color(218, 0, 0), //queens
-		color(1, 127, 10), // python & c
-		color(217, 206, 56), // lss
-		color(73, 73, 73), //mitm
-		color(127, 18, 135), //rez
-		color(65, 71, 70), // Sweatervest
-		color(43, 88, 142), //this app
-		color(244, 224, 127), //waterloo
-		color(34, 43, 99) // Me
+		color(64, g: 20, b: 20), //me
+		color(73, g: 98, b: 115), //ktown
+		color(108, g: 0, b: 61), //jville
+		color(218, g: 0, b: 0), //queens
+		color(1, g: 127, b: 10), // python & c
+		color(217, g: 206, b: 56), // lss
+		color(73, g: 73, b: 73), //mitm
+		color(127, g: 18, b: 135), //rez
+		color(65, g: 71, b: 70), // Sweatervest
+		color(43, g: 88, b: 142), //this app
+		color(244, g: 224, b: 127), //waterloo
+		color(34, g: 43, b: 99) // Me
 	]
 	
 	let textColors = [
-		color(224, 224, 224), //me
-		color(255, 255, 255), //ktown
-		color(244, 244, 244), //jville
-		color(255, 255, 255), //queens
-		color(237, 237, 237), // python & c
-		color(0, 0, 0), // lss
-		color(30, 255, 0), //mitm
-		color(255, 255, 255), //rez
-		color(240, 240, 240), // Sweatervest
-		color(255, 255, 255), //this app
-		color(15, 15, 14), //waterloo
-		color(254, 254, 254) // Me
+		color(224, g: 224, b: 224), //me
+		color(255, g: 255, b: 255), //ktown
+		color(244, g: 244, b: 244), //jville
+		color(255, g: 255, b: 255), //queens
+		color(237, g: 237, b: 237), // python & c
+		color(0, g: 0, b: 0), // lss
+		color(30, g: 255, b: 0), //mitm
+		color(255, g: 255, b: 255), //rez
+		color(240, g: 240, b: 240), // Sweatervest
+		color(255, g: 255, b: 255), //this app
+		color(15, g: 15, b: 14), //waterloo
+		color(254, g: 254, b: 254) // Me
 	]
 	
 	let images = [ "me1", "kingston", "jville", "queensESU", "pc", "lss", "mitm", "rez", "sweatervest", "wwdc","waterloo", "me2"]
@@ -132,7 +132,7 @@ class CardData: NSObject {
 			events.append(CardInfo(img: images[i], detail: descriptions[i], name: eventNames[i], bcC: backgroundColors[i], tC: textColors[i], index: i, storyboard: storyboards[i], extraInfoDict: extraStuff[i]))
 			
 		}
-		return events.reverse()
+		return Array(events.reverse())
 	}
 	
 }
